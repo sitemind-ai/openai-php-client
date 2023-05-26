@@ -1,6 +1,6 @@
 <?php
 
-namespace App\LLM;
+namespace Sitemind\LLM;
 
 use Sitemind\LLM\Contexts\ChatContext;
 use Sitemind\LLM\Contexts\CompletionContext;

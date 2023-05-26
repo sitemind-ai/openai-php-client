@@ -1,6 +1,6 @@
 <?php
 
-namespace App\LLM;
+namespace Sitemind\LLM;
 
 use Sitemind\LLM\Config\ApiConfig;
 use Sitemind\LLM\Contexts\ChatContext;
@@ -16,7 +16,7 @@ use Sitemind\LLM\Factories\ClientFactory;
  *
  * The main client class for interacting with language learning models.
  *
- * @package App\LLM
+ * @package Sitemind\LLM
  */
 class Client
 {

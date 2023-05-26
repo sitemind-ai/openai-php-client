@@ -46,7 +46,7 @@ You need to initialize a client object using `ApiClient` configuration. The foll
 
 use Sitemind\LLM\Config\ApiConfig;
 use Sitemind\LLM\Entities\ChatMessage;
-use App\LLM\Client;
+use Sitemind\LLM\Client;
 
 $config = new ApiConfig('openai', 'your-api-key');
 $client = new Client($config);
@@ -87,7 +87,7 @@ If the streaming option is used, the following example shows how to add a handle
 <?php
 
 use Sitemind\LLM\Config\ApiConfig;
-use App\LLM\Client;
+use Sitemind\LLM\Client;
 
 $config = new ApiConfig('openai', 'your-api-key');
 $client = new Client($config);
