@@ -1,6 +1,6 @@
 {
     "name": "sitemind-ai/openai-php-client",
-    "description": "Sitemind Large Language Model is a library that simplifies interactions with various AI language models. It's developer-friendly, and highly customizable.",
+    "description": "OpenAI PHP Client is a PHP library wrapper for the OpenAI API.",
     "type": "library",
     "license": "MIT",
     "authors": [

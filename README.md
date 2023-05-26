@@ -5,7 +5,7 @@ This is a library for interacting with Language Learning Models (LLMs), built wi
 The library currently supports OpenAI's GPT-3.5-turbo, but it can be extended to support other LLMs as well.
 
 ## Features
-- **Cross-Platform Compatibility**: The library is designed to work with different language learning models, including OpenAI's GPT-3.5-turbo.
+- **Cross-API Compatibility**: The library is designed to work with different language learning models, including OpenAI's GPT-3.5-turbo.
 
 - **Ease of Use**: With simple configuration and intuitive API, this library enables developers to easily interact with complex language learning models.
 
