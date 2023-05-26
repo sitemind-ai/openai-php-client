@@ -1,4 +1,4 @@
-# OpenAI PHP Client - Large Language Model
+# OpenAI PHP Client
 (Written by ChatGPT)
 
 This is a library for interacting with Language Learning Models (LLMs), built with a focus on AI-driven chat functionalities. 
