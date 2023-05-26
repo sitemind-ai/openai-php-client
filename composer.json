@@ -1,5 +1,5 @@
 {
-    "name": "sitemind/llm",
+    "name": "sitemind-ai/openai-php-client",
     "description": "Sitemind Large Language Model is a library that simplifies interactions with various AI language models. It's developer-friendly, and highly customizable.",
     "type": "library",
     "license": "MIT",
