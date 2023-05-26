@@ -51,11 +51,11 @@ use Sitemind\LLM\Client;
 $config = new ApiConfig('openai', 'your-api-key');
 $client = new Client($config);
 
-// Set the system message
+// Set the system message. This is optional.
 $client->setSystemMessage("You are a nice chatbot");
 
 // User message
-$client->chat("Hello, how are you?", "user");
+$client->chat("Hello, how are you?");
 
 // Get the last message
 $message = $client->getLastMessage();
@@ -87,15 +87,18 @@ If the streaming option is used, the following example shows how to add a handle
 <?php
 
 use Sitemind\LLM\Config\ApiConfig;
+use Sitemind\LLM\Entities\ChatStream;
 use Sitemind\LLM\Client;
 
 $config = new ApiConfig('openai', 'your-api-key');
 $client = new Client($config);
 
-$client->addStreamHandler(function ($streamData) {
+$client->addStreamHandler(function (ChatStream $stream) {
     // Handle the stream data
-    // The $streamData object has a 'done' property to check if the stream is done
-    if ($streamData->done) {
+    echo $stream->getMessage()?->content; // Prints the partial message content
+    
+    // The $stream object has a 'done' property to check if the stream is done
+    if ($stream->done) {
         // Do something when the stream is done
     }
 });
