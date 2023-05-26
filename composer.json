@@ -1,0 +1,21 @@
+{
+    "name": "sitemind/llm",
+    "description": "Sitemind Large Language Model is a library that simplifies interactions with various AI language models. It's developer-friendly, and highly customizable.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Lennard",
+            "email": "lennard@spring.nl"
+        }
+    ],
+    "require": {
+        "php": ">=8.1",
+        "ext-json": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Sitemind\\LLM\\": "src/"
+        }
+    }
+}

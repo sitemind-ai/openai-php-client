@@ -1,0 +1,141 @@
+<?php
+
+namespace Sitemind\LLM\Drivers;
+
+use Sitemind\LLM\ApiClient;
+use Sitemind\LLM\Config\ApiConfig;
+use Sitemind\LLM\Contexts\ChatContext;
+use Sitemind\LLM\Contexts\CompletionContext;
+use Sitemind\LLM\Contexts\EmbeddingContext;
+use Sitemind\LLM\Entities\ApiResponse;
+use Sitemind\LLM\Entities\ChatResponse;
+use Sitemind\LLM\Entities\ChatStream;
+use Sitemind\LLM\Exceptions\ApiException;
+use Sitemind\LLM\OpenAI\OpenAIChatResponse;
+use Sitemind\LLM\OpenAI\OpenAIChatStream;
+use Exception;
+
+/**
+ * This class handles the OpenAI API.
+ */
+class OpenAI extends ApiClient
+{
+    private string $apiKey;
+
+    /**
+     * Constructs a new OpenAI object.
+     * 
+     * @param ApiConfig $config The API configuration.
+     * 
+     * @throws Exception if the API key is not provided.
+     */
+    public function __construct(ApiConfig $config) {
+        if (!$config->apiKey) {
+            throw new Exception("API key is required for OpenAI");
+        }
+        $this->apiKey = $config->apiKey;
+    }
+
+    public function getHeaders(array $headers = []) : array
+    {
+        return array_merge([
+            "Content-Type: application/json",
+            "Authorization: Bearer $this->apiKey",
+        ], $headers);
+    }
+
+    /**
+     * Sends a chat message using the OpenAI API.
+     * 
+     * @param ChatContext $context The chat context.
+     * 
+     * @throws ApiException if an API error occurs.
+     */
+    public function chat(ChatContext $context) : ?ChatResponse {
+        $messages = $context->getHistoryAndMessage();
+        
+        $options = array_merge([
+            'model' => "gpt-3.5-turbo",
+            'messages' => $messages,
+            'stream' => count($this->streamHandlers) > 0,
+        ], $context->options);
+
+        $response = $this->sendJsonRequest("POST", "https://api.openai.com/v1/chat/completions", $options, $this->getHeaders());
+
+        if ($response['error'] ?? null) {
+            throw new ApiException($response['error']['message'] ?? 'Unknown error', $response['error']['type'] ?? null);
+        }
+
+        return is_array($response) ? $this->createChatResponse($response) : null;
+    }
+
+    /**
+     * Gets the available models.
+     *
+     * @return array The available models.
+     */
+    public function models() : ApiResponse
+    {
+        $response = $this->sendJsonRequest("GET", "https://api.openai.com/v1/models", [], $this->getHeaders());
+
+        return $this->createApiResponse($response);
+    }
+
+    /**
+     * Get the embeddings for a text.
+     *
+     * @param EmbeddingContext $context
+     * @return ApiResponse
+     */
+    public function embeddings(EmbeddingContext $context) : ApiResponse
+    {
+        $response = $this->sendJsonRequest("POST", "https://api.openai.com/v1/embeddings", $context->toArray(), $this->getHeaders());
+
+        return $this->createApiResponse($response);
+    }
+
+    /**
+     * Creates stream data.
+     * 
+     * @param $curl The cURL handle.
+     * @param $data The parsed response body.
+     * 
+     * @return ChatStream The created stream data.
+     */
+    public function createChatStream($curl, $data) : ChatStream 
+    {
+        try {
+            $data = json_decode($data, true);
+        } catch (\Throwable $th) {
+            $data = null;
+        }
+
+        return new OpenAIChatStream($curl, $data);
+    }
+
+    /**
+     * Creates result data.
+     * 
+     * @param $data The parsed response body.
+     * 
+     * @return ChatResponse The created result data.
+     */
+    public function createChatResponse($data) : ChatResponse
+    {
+        return new OpenAIChatResponse($data);
+    }
+
+    /**
+     * Handles a completion request.
+     * 
+     * @param CompletionContext $context The completion context.
+     * 
+     * @return string The completion result.
+     */
+    public function completion(CompletionContext $context): string {
+        // TODO: Implement the autocomplete functionality using OpenAI's Autocomplete API
+        // You can access the prompt with $context->prompt
+
+        return "";
+    }
+}
