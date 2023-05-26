@@ -32,7 +32,7 @@ The library currently supports OpenAI's GPT-3.5-turbo, but it can be extended to
 Firstly, you need to install the library in your PHP project. 
 
 ```
-composer require sitemind/llm
+composer require sitemind-ai/openai-php-client
 ```
 
 ## Usage
