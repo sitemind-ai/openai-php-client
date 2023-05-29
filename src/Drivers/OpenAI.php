@@ -51,7 +51,7 @@ class OpenAI extends ApiClient
      * 
      * @throws ApiException if an API error occurs.
      */
-    public function chat(ChatContext $context) : ?ChatResponse {
+    public function chat(ChatContext $context) : ?OpenAIChatResponse {
         $messages = $context->getHistoryAndMessage();
         
         $options = array_merge([
@@ -120,22 +120,8 @@ class OpenAI extends ApiClient
      * 
      * @return ChatResponse The created result data.
      */
-    public function createChatResponse($data) : ChatResponse
+    public function createChatResponse($data) : OpenAIChatResponse
     {
         return new OpenAIChatResponse($data);
-    }
-
-    /**
-     * Handles a completion request.
-     * 
-     * @param CompletionContext $context The completion context.
-     * 
-     * @return string The completion result.
-     */
-    public function completion(CompletionContext $context): string {
-        // TODO: Implement the autocomplete functionality using OpenAI's Autocomplete API
-        // You can access the prompt with $context->prompt
-
-        return "";
     }
 }

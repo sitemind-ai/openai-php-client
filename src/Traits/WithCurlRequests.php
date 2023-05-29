@@ -29,6 +29,11 @@ trait WithCurlRequests
 
         if ($jsonData === []) {
             unset($curlOptions[CURLOPT_POSTFIELDS]);
+        } else {
+            $curlOptions[CURLOPT_HTTPHEADER][] = 'Content-Type: application/json';
+
+            // Accept
+            $curlOptions[CURLOPT_HTTPHEADER][] = 'Accept: application/json';
         }
 
         if ($jsonData['stream'] ?? false) {

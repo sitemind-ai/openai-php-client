@@ -4,6 +4,7 @@ namespace Sitemind\LLM;
 
 use Sitemind\LLM\Contexts\ChatContext;
 use Sitemind\LLM\Contexts\CompletionContext;
+use Sitemind\LLM\Contexts\EmbeddingContext;
 use Sitemind\LLM\Entities\ApiResponse;
 use Sitemind\LLM\Entities\ChatResponse;
 use Sitemind\LLM\Entities\ChatStream;
@@ -72,15 +73,22 @@ abstract class ApiClient
      * @param ChatContext $context The context for the chat message.
      * @return ?ChatResponse The response from the API.
      */
-    abstract public function chat(ChatContext $context) : ?ChatResponse;
+    public function chat(ChatContext $context) : ?ChatResponse {
+        throw new \Exception("Not implemented");
+    }
 
     /**
      * Request a completion from the API.
      *
      * @param CompletionContext $context The context for the completion request.
-     * @return void
      */
-    abstract public function completion(CompletionContext $context);
+    public function completion(CompletionContext $context) : ApiResponse {
+        throw new \Exception("Not implemented");
+    }
+
+    public function embeddings(EmbeddingContext $context) : ApiResponse {
+        throw new \Exception("Not implemented");
+    }
 
     /**
      * Creates stream data.

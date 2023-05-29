@@ -5,11 +5,13 @@ namespace Sitemind\LLM;
 use Sitemind\LLM\Config\ApiConfig;
 use Sitemind\LLM\Contexts\ChatContext;
 use Sitemind\LLM\Contexts\CompletionContext;
+use Sitemind\LLM\Contexts\EmbeddingContext;
+use Sitemind\LLM\Entities\ApiResponse;
 use Sitemind\LLM\Entities\ChatMessage;
 use Sitemind\LLM\Entities\ChatStream;
 use Sitemind\LLM\Entities\ChatResponse;
 use Sitemind\LLM\Factories\ClientFactory;
-
+use Sitemind\LLM\Traits\WithDiskCaching;
 
 /**
  * Class Client
@@ -20,9 +22,12 @@ use Sitemind\LLM\Factories\ClientFactory;
  */
 class Client
 {
+    use WithDiskCaching;
+    
     protected ApiClient $driver;
     protected array $history = [];
     protected array $streamMessages = [];
+    protected array $cache = [];
 
     /**
      * Client constructor.
@@ -193,13 +198,28 @@ class Client
      *
      * @param CompletionContext $context
      * The context of the completion request.
-     *
-     * @return self
      */
-    public function completion(CompletionContext $context) : self {
-        $this->driver->completion($context);
+    public function completion(CompletionContext $context) : ApiResponse {
+        return $this->driver->completion($context);
+    }
 
-        return $this;
+    public function embeddings(EmbeddingContext $context) : ApiResponse
+    {
+        if ($context->useCache) {
+            $result = $this->getCache($context->toArray());
+            
+            if ($result) {
+                return $this->driver->createApiResponse($result);
+            }
+        }
+        
+        $result = $this->driver->embeddings($context);
+        
+        if ($context->useCache) {
+            $this->setCache($context->toArray(), $result->raw());
+        }
+
+        return $result;
     }
 
     /**

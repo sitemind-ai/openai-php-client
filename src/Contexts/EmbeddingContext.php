@@ -16,7 +16,8 @@ class EmbeddingContext
     public function __construct(
             public string $model,
             public string|array $input,
-            public ?string $user,
+            public ?string $user = null,
+            public bool $useCache = false
         )
     {
         
