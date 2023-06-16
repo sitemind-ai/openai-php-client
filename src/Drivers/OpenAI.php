@@ -60,7 +60,9 @@ class OpenAI extends ApiClient
             'stream' => count($this->streamHandlers) > 0,
         ], $context->options);
 
+        
         $response = $this->sendJsonRequest("POST", "https://api.openai.com/v1/chat/completions", $options, $this->getHeaders());
+
 
         if ($response['error'] ?? null) {
             throw new ApiException($response['error']['message'] ?? 'Unknown error', $response['error']['type'] ?? null);

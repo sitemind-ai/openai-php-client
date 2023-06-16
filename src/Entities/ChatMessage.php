@@ -17,11 +17,14 @@ class ChatMessage
      * @param string|null $role The role of the message sender (e.g., "system", "user", "assistant")
      * @param string|null $content The content of the message
      * @param string|null $name The name of the user (optional)
+     * @param array|null $function_call The function call to be made (optional)
      */
     public function __construct(
         public ?string $role, 
         public ?string $content, 
-        public ?string $name = null)
+        public ?string $name = null,
+        public ?array $function_call = null
+    )
     {
     }
 
@@ -41,6 +44,10 @@ class ChatMessage
             $data['name'] = $this->name;
         }
 
+        if ($this->function_call) {
+            $data['function_call'] = $this->function_call;
+        }
+
         return $data;
     }
 
@@ -52,7 +59,7 @@ class ChatMessage
      */
     public static function fromArray(array $message) : ChatMessage
     {
-        return new ChatMessage($message['role'] ?? null, $message['content'] ?? null, $message['name'] ?? null);
+        return new ChatMessage($message['role'] ?? null, $message['content'] ?? null, $message['name'] ?? null, $message['function_call'] ?? null);
     }    
 
     /**
@@ -66,7 +73,7 @@ class ChatMessage
         $messages = [];
 
         foreach($history as $item) {
-            $messages[] = new ChatMessage($item['role']?? null, $item['content'] ?? null, $item['name'] ?? null);
+            $messages[] = static::fromArray($item);
         }
 
         return $messages;
